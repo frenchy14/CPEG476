@@ -11,11 +11,11 @@ using namespace std;
 
 class Word{
     public:
-        string word;
+        string tempWord;
         vector<string> nextWordList;
         
         Word(string word, string nextWord){
-            tempword = word;
+            tempWord = word;
             nextWordList.push_back(nextWord);
         }       
 };
@@ -23,19 +23,23 @@ class Word{
 vector<Word> MarkovChain;
 string tweet = "";
 
-int parseFile(string file){
-    string line;
-    
-    ifstream myfile(file.c_str());
-    if (myfile.is_open()){
-        while(getline (myfile,line)){
-            parseLine(line);
+int getMarkovIndex(string word){
+    for(int i = 0; i < MarkovChain.size(); i++){
+        if(MarkovChain.at(i).word.compare(word) == 0){
+            return i;
         }
-        myfile.close();
-        return 1;
+    }
+    return -1;
+}
+
+void addToChain(string word, string nextWord){
+    int index = getMarkovIndex(word);
+    
+    if(index == -1){
+        MarkovChain.push_back(Word(word, nextWord));
     }
     else{
-        return 0;
+        MarkovChain.at(index).nextWordList.push_back(nextWord);
     }
 }
 
@@ -91,29 +95,26 @@ void parseLine(string line){
             nextWord = "";
             wordStart = string::npos;
         }
-        addToChain(word, follower);
+        addToChain(word, nextWord);
     }
 }
 
-int getMarkovIndex(string word){
-    for(int i = 0; i < MarkovChain.size(); i++){
-        if(MarkovChain.at(i).word.compare(word) == 0){
-            return i;
-        }
-    }
-    return -1;
-}
-
-void addToChain(string word, string nextWord){
-    int index = getChain(word);
+int parseFile(string file){
+    string line;
     
-    if(index == -1){
-        MarkovChain.push_back(Word(word, nextWord));
+    ifstream myfile(file.c_str());
+    if (myfile.is_open()){
+        while(getline (myfile,line)){
+            parseLine(line);
+        }
+        myfile.close();
+        return 1;
     }
     else{
-        MarkovChain.at(index).nextWordList.push_back(nextWord);
+        return 0;
     }
 }
+
 
 void createTweet(){
     int wordIndex = rand() % MarkovChain.size(); 
@@ -161,12 +162,11 @@ int main(int argc, char* argv[]){
     string arguement(argv[1]);
     srand(time(NULL));
     
-    cout << "Parsing text file " << arguement << "..." << endl;
-    
-    for(int tweetCount = 0; tweetCount < 5; tweetCount++) {
-      createTweet();
+    if(parseFile(arguement)){
+        cout << "Parsing text file " << arguement << "..." << endl;
+        for(int tweetCount = 0; tweetCount < 5; tweetCount++) {
+        createTweet();
     }
-
     else{
         cout << "File "<< arguement << " was not found" << endl;
     }
