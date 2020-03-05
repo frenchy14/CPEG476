@@ -165,7 +165,8 @@ int main(int argc, char* argv[]){
     if(parseFile(arguement)){
         cout << "Parsing text file " << arguement << "..." << endl;
         for(int tweetCount = 0; tweetCount < 5; tweetCount++) {
-        createTweet();
+            createTweet();
+        }
     }
     else{
         cout << "File "<< arguement << " was not found" << endl;
