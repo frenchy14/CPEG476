@@ -25,7 +25,7 @@ string tweet = "";
 
 int getMarkovIndex(string word){
     for(int i = 0; i < MarkovChain.size(); i++){
-        if(MarkovChain.at(i).word.compare(word) == 0){
+        if(MarkovChain.at(i).tempWord.compare(word) == 0){
             return i;
         }
     }
@@ -125,7 +125,7 @@ void createTweet(){
     string prevWord = "";
     
     tweet = "";
-    tweet = MarkovChain.at(wordIndex).word;
+    tweet = MarkovChain.at(wordIndex).tempWord;
     prevWord = tweet;
     
     while(!tweetMax){
