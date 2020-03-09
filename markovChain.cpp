@@ -160,7 +160,6 @@ void createTweet(){
         }
     }
     cout << tweet << endl;
-    cout << "[" << tweet.length() << " characters]" << endl;
 }
 
 //The main function of this program simply asks the user to input the name of a text file and then generates tweets (5 at the moment)
@@ -177,6 +176,7 @@ int main(int argc, char* argv[]){
     if(parseFile(arguement)){
         cout << "Parsing the entered text file " << arguement << "..." << endl;
         for(int tweetCount = 0; tweetCount < 5; tweetCount++) {
+            cout << "////////////This is a line to separate the tweets///////////" << endl;
             createTweet();
         }
     }
